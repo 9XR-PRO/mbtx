@@ -635,7 +635,7 @@ bool ee32LoadGeneral()
 #endif
 
   uint16_t sum=0;
-  if(size>(43)) for(uint8_t i=0; i<12;i++) sum+=g_eeGeneral.calibMid[i];
+  if(size>(43)) sum = evalChkSum();
 	else return false ;
   return g_eeGeneral.chkSum == sum;
 }
