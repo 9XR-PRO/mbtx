@@ -1,0 +1,88 @@
+ninja_required_version = 1.3
+
+src = .
+obj = skyRobj
+
+options = -mcpu=cortex-m3 -Os -gdwarf-2 -mthumb -fomit-frame-pointer -fverbose-asm -Wall -MD -MP
+defines = -Dat91sam3s8 -DRUN_FROM_FLASH=1 -DPCBSKY -DSTAMP -DREVB -DREVX -DXFIRE -DFRSKY -DCPUARM 
+includes =  -I $src
+cflags = $options $defines $includes
+
+rule cc
+  deps = gcc
+  depfile = $out.d
+  command = arm-none-eabi-gcc $cflags -Wstrict-prototypes -c $in -MF $out.d -o $out
+
+rule cpp
+  deps = gcc
+  depfile = $out.d
+  command = arm-none-eabi-gcc $cflags -fno-exceptions -c $in -MF $out.d -o $out
+
+rule link
+  command = arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -nostartfiles -T$ldfile -Wl,-Map=$mapfile,--cref,--no-warn-mismatch -o $out $in
+
+rule hexcopy
+  command = arm-none-eabi-objcopy -O ihex  $in $out
+
+rule bincopy
+  command = arm-none-eabi-objcopy -O binary  $in $out
+
+rule objdump
+  command = arm-none-eabi-objdump -h -S $in > $out
+
+rule touch
+   command = touch $out
+
+build $obj/core_cm3.o: cc $src/core_cm3.c
+build $obj/board_lowlevel.o: cc $src/board_lowlevel.c
+build $obj/crt.o: cc $src/crt.c
+build $obj/vectors_sam3s.o: cc $src/vectors_sam3s.c
+build $obj/port.o: cc $src/port.c
+build $obj/coos.o: cc $src/coos.c
+
+build $obj/stamp.o: cpp $src/stamp.cpp
+build $obj/drivers.o: cpp $src/drivers.cpp
+build $obj/sdcard_driver.o: cpp $src/sdcard_driver.cpp
+build $obj/ff.o: cpp $src/ff.cpp
+build $obj/sound.o: cpp $src/sky/sound.cpp
+build $obj/diskio.o: cpp $src/sky/diskio.cpp
+build $obj/power.o: cpp $src/sky/power.cpp
+build $obj/lcd.o: cpp $src/lcd.cpp
+build $obj/debug.o: cpp $src/debug.cpp
+build $obj/file.o: cpp $src/file.cpp
+build $obj/templates.o: cpp $src/templates.cpp
+build $obj/pers.o: cpp $src/pers.cpp
+build $obj/menus.o: cpp $src/menus.cpp
+build $obj/frsky.o: cpp $src/frsky.cpp
+build $obj/audio.o: cpp $src/audio.cpp
+build $obj/ersky9x.o: cpp $src/ersky9x.cpp
+build $obj/timers.o: cpp $src/timers.cpp
+build $obj/logicio.o: cpp $src/logicio.cpp
+build $obj/pulses.o: cpp $src/pulses.cpp
+build $obj/en.o: cpp $src/en.cpp
+build $obj/de.o: cpp $src/de.cpp
+build $obj/fr.o: cpp $src/fr.cpp
+build $obj/loadboot.o: cpp $src/loadboot.cpp
+build $obj/maintenance.o: cpp $src/maintenance.cpp
+build $obj/mavlink.o: cpp $src/mavlink.cpp
+build $obj/sbus.o: cpp $src/sbus.cpp
+build $obj/logs.o: cpp $src/logs.cpp
+build $obj/no.o: cpp $src/no.cpp
+build $obj/se.o: cpp $src/se.cpp
+build $obj/it.o: cpp $src/it.cpp
+build $obj/pl.o: cpp $src/pl.cpp
+build $obj/vi.o: cpp $src/vi.cpp
+build $obj/sp.o: cpp $src/sp.cpp
+build $obj/pdi.o: cpp $src/pdi.cpp
+
+build ersky9xr_rom.elf: link $obj/core_cm3.o $obj/board_lowlevel.o $obj/crt.o $obj/vectors_sam3s.o $obj/port.o $obj/coos.o $obj/stamp.o $obj/drivers.o $obj/sdcard_driver.o $obj/ff.o $obj/sound.o $obj/diskio.o $obj/power.o $obj/lcd.o $obj/debug.o $obj/file.o $obj/templates.o $obj/pers.o $obj/menus.o $obj/frsky.o $obj/audio.o $obj/ersky9x.o $obj/timers.o $obj/logicio.o $obj/pulses.o $obj/en.o $obj/de.o $obj/fr.o $obj/loadboot.o $obj/maintenance.o $obj/mavlink.o $obj/sbus.o $obj/logs.o $obj/no.o $obj/se.o $obj/it.o $obj/pl.o $obj/vi.o $obj/sp.o $obj/pdi.o
+  mapfile = ersky9xr_rom.map
+  ldfile = $src/sam3s8c_flash.ld
+
+build ersky9xr_rom.lss: objdump ersky9xr_rom.elf
+build ersky9xr_rom.hex: hexcopy ersky9xr_rom.elf
+build ersky9xr_rom.map: touch ersky9xr_rom.elf
+build ersky9xr_rom.bin: bincopy ersky9xr_rom.elf
+
+build all: phony ersky9xr_rom.bin ersky9xr_rom.hex ersky9xr_rom.map ersky9xr_rom.lss
+
