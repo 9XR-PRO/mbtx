@@ -46,7 +46,9 @@
 #include "CoOS.h"
 #endif
 
+#ifndef NULL
 #define NULL 0
+#endif
 
 extern int16_t AltOffset ;
 extern uint16_t LogTimer ;
