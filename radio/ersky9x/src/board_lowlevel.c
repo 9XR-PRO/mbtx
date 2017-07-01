@@ -196,7 +196,8 @@ static uint32_t BOARD_ConfigurePmc(void)
 		// Switch to PLLA as main clock 36MHz
   PMC->PMC_MCKR = BOARD_MCKR;
   timeout = 0;
-  while (!(PMC->PMC_SR & PMC_SR_MCKRDY) && (timeout++ < CLOCK_TIMEOUT));
+  while (!(PMC->PMC_SR & PMC_SR_MCKRDY) && (timeout++ < CLOCK_TIMEOUT))
+    ;
 
 #endif
 #ifdef USE_54_MHZ
@@ -225,7 +226,8 @@ void revert_osc()
 
   pmcptr->PMC_MCKR = (PMC->PMC_MCKR & ~(uint32_t)PMC_MCKR_CSS) | PMC_MCKR_CSS_SLOW_CLK;
   timeout = 0;
-  while (!(pmcptr->PMC_SR & PMC_SR_MCKRDY) && (++timeout < CLOCK_TIMEOUT));
+  while (!(pmcptr->PMC_SR & PMC_SR_MCKRDY) && (++timeout < CLOCK_TIMEOUT))
+    ;
 
     
 	pmcptr->CKGR_PLLAR = 1 << 29 ;		// Stop PLLA
