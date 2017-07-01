@@ -9148,7 +9148,7 @@ int8_t getMovedSwitch()
 	for ( uint8_t i=8 ; i>0 ; i-- )
 	{
     uint8_t prev = (switches_states & mask) >> (i*2-2) ;
-		uint8_t next ;
+		uint8_t next = ~prev; // initialize next with value that is not same as prev.
 		uint8_t swtchIndex = i ;
 		switch ( i )
 		{
