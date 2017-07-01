@@ -160,7 +160,7 @@ const uint8_t UnitsString[] = "\005Feet VoltsDeg_CDeg_FmAh  Amps MetreWattsPcent
 
 
 uint16_t Multiprotocols[NUM_MULTI_PROTOCOLS] ;
-#define MULTI_TEXT_SIZE	480
+#define MULTI_TEXT_SIZE	800
 uint8_t MultiText[MULTI_TEXT_SIZE] ;
 uint8_t MultiMapping[64] ;
 
