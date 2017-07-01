@@ -735,15 +735,15 @@ $(AOBJS) : $(OBJDIR)/%.o : %.s
 	$(BINX) $< $@
 
 clean:
-	-rm -f x9dobj/*.*
-	-rm -f x9eobj/*.*
-	-rm -f x9dpobj/*.*
-	-rm -f x12dobj/*.*
-	-rm -f skyobj/*.*
-	-rm -f skyRobj/*.*
-	-rm -f skySobj/*.*
-	-rm -f skyDobj/*.*
-	-rm -f sky9XTobj/*.*
+	-rm -rf x9dobj
+	-rm -rf x9eobj
+	-rm -rf x9dpobj
+	-rm -rf x12dobj
+	-rm -rf skyobj
+	-rm -rf skyRobj
+	-rm -rf skySobj
+	-rm -rf skyDobj
+	-rm -rf sky9XTobj
 	-rm -f $(FULL_PRJ).elf
 	-rm -f $(FULL_PRJ).map
 	-rm -f $(FULL_PRJ).hex
