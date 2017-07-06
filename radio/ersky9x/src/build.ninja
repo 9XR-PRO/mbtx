@@ -5,7 +5,7 @@ obj = obj
 
 options = -mcpu=cortex-m3 -mthumb -Os -fomit-frame-pointer -gdwarf-2 -fverbose-asm
 warnings = -Wall
-defines = -Dat91sam3s8 -DCPUARM -DRUN_FROM_FLASH=1 -DPCBSKY -DREVB -DREVX -DXFIRE -DFRSKY
+defines = -Dat91sam3s8 -DCPUARM -DPCBSKY -DREVB -DREVX -DXFIRE -DFRSKY
 includes = -I $src
 cflags = $options $warnings $defines $includes
 
