@@ -1,22 +1,23 @@
 ninja_required_version = 1.3
 
 src = .
-obj = skyRobj
+obj = obj
 
-options = -mcpu=cortex-m3 -Os -gdwarf-2 -mthumb -fomit-frame-pointer -fverbose-asm -Wall -MD -MP
-defines = -Dat91sam3s8 -DRUN_FROM_FLASH=1 -DPCBSKY -DSTAMP -DREVB -DREVX -DXFIRE -DFRSKY -DCPUARM 
-includes =  -I $src
-cflags = $options $defines $includes
+options = -mcpu=cortex-m3 -mthumb -Os -fomit-frame-pointer -gdwarf-2 -fverbose-asm
+warnings = -Wall
+defines = -Dat91sam3s8 -DCPUARM -DRUN_FROM_FLASH=1 -DPCBSKY -DREVB -DREVX -DXFIRE -DFRSKY
+includes = -I $src
+cflags = $options $warnings $defines $includes
 
 rule cc
-  deps = gcc
+  #deps = gcc
   depfile = $out.d
-  command = arm-none-eabi-gcc $cflags -Wstrict-prototypes -c $in -MF $out.d -o $out
+  command = arm-none-eabi-gcc $cflags -Wstrict-prototypes -MMD -MF $out.d -c $in -o $out
 
 rule cpp
-  deps = gcc
+  #deps = gcc
   depfile = $out.d
-  command = arm-none-eabi-gcc $cflags -fno-exceptions -c $in -MF $out.d -o $out
+  command = arm-none-eabi-gcc $cflags -fno-exceptions -MMD -MF $out.d -c $in -o $out
 
 rule link
   command = arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -nostartfiles -T$ldfile -Wl,-Map=$mapfile,--cref,--no-warn-mismatch -o $out $in
@@ -85,4 +86,3 @@ build ersky9xr_rom.map: touch ersky9xr_rom.elf
 build ersky9xr_rom.bin: bincopy ersky9xr_rom.elf
 
 build all: phony ersky9xr_rom.bin ersky9xr_rom.hex ersky9xr_rom.map ersky9xr_rom.lss
-
